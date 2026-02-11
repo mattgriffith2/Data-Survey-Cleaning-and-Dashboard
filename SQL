@@ -107,3 +107,26 @@ Update clean.survey_data
 set ethnicity = trim(replace(cast(ethnicity as varchar(50)),'Other (Please Specify):',''))
 from clean.survey_data
 
+--Remove "Other:" from fav programming language
+update clean.survey_data
+set fav_programming_lang = trim(replace(cast(fav_programming_lang as varchar(50)),'Other:','')) 
+from clean.survey_data
+
+--Standardize SQL related answers
+update clean.survey_data
+set fav_programming_lang = 'SQL'
+where fav_programming_lang like '%SQL%'
+
+--standardize people without a favorite language
+update clean.survey_data
+set fav_programming_lang = 'None'
+where fav_programming_lang like '%none%'
+
+update clean.survey_data
+set fav_programming_lang = 'None'
+where fav_programming_lang like '%dont%'
+
+update clean.survey_data
+set fav_programming_lang = 'None'
+where fav_programming_lang like '%do not%'
+
