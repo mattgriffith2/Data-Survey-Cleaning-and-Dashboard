@@ -56,3 +56,54 @@ Update clean.survey_data
 set current_yearly_salary = Replace(current_yearly_salary,'k','000')
 where current_yearly_salary = current_yearly_salary
 
+
+--removing extra 0s in time_taken
+ALTER TABLE clean.survey_data
+ALTER COLUMN time_taken time(0);
+
+--removing extra 0s in time_spent
+ALTER TABLE clean.survey_data
+ALTER COLUMN time_spent time(0);
+
+--Break out repeated measures - create a new table for all of the happyness categories
+
+Create table clean.Happiness (
+	unique_id varchar(50),
+	happiness_category text,
+	happieness_score int
+	)
+	;
+
+	insert into clean.happiness (unique_id, happiness_category, happieness_score)
+	
+			select unique_id, Happiness_category, hapiness_rating 
+			from clean.survey_data
+			UNPIVOT ( hapiness_rating for happiness_category in (happy_wth_work_life_balance,
+			happy_wth_coworkers,
+			happy_wth_management,
+			happy_wth_upward_mobility,
+			happy_wth_learning_new_things)) as unpvt
+
+--validate table creation
+select * from clean.happiness
+
+-- Remove "Other (Please Specify) from current role
+update clean.survey_data
+set current_role = trim(replace(cast(current_role as varchar(50)),'Other (Please Specify):',''))
+from clean.survey_data
+
+-- Remove "Other (Please Specify) from Industry
+update clean.survey_data
+set industry = replace(cast(industry as varchar(50)), 'Other (Please Specify):','')
+from clean.survey_data
+
+-- Remove "Other (Please Specify) from country lived in
+Update clean.survey_data
+set country_lived_in = trim(replace(cast(country_lived_in as varchar(50)),'Other (Please Specify):',''))
+from clean.survey_data
+
+--Remove "Other (Please Specify) from ethnicity
+Update clean.survey_data
+set ethnicity = trim(replace(cast(ethnicity as varchar(50)),'Other (Please Specify):',''))
+from clean.survey_data
+
