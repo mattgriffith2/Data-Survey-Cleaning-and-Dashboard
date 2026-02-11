@@ -1,0 +1,44 @@
+--create raw table
+
+create table raw.survey_data (
+	unique_id VARCHAR(50),
+	email VARCHAR(50),
+	date_taken Date,
+	time_taken time,
+	Browser Varchar(50),
+	OS Varchar(50),
+	City text,
+	Country text,
+	referrer text,
+	time_spent time,
+	current_role text,
+	switched_careers VARCHAR(50),
+	current_yearly_salary VARCHAR(50),
+	industry text,
+	fav_programming_lang text,
+	Happy_wth_Salary char(10),
+	Happy_wth_work_life_balance char(10),
+	Happy_wth_coworkers char(10),
+	Happy_wth_management char(10),
+	Happy_wth_upward_mobility char (10),
+	Happy_wth_Learning_new_things char (10),
+	Difficulty_to_break_into_data text,
+	new_job_most_important_thing text,
+	Sex text,
+	Current_Age char(10),
+	Country_lived_In text,
+	Education_level VARCHAR(50),
+	Ethnicity Text
+	)
+	;
+
+--import data from csv
+bulk insert raw.survey_data 
+	from 'C:\Users\mattg\Downloads\Power BI - Final Project.csv'
+	WITH (
+    FORMAT = 'CSV',        -- SQL Server 2022+ supports FORMAT=CSV
+    FIRSTROW = 2,          -- Skip header row
+    FIELDTERMINATOR = ',', -- Column delimiter
+    ROWTERMINATOR = '\n',  -- Row delimiter
+    TABLOCK                -- Improves performance
+);
